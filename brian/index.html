@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Belezas do Mundo - Paisagens Exclusivas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
+</head>
+<body class="h-full bg-gray-50">
+    <header class="gradient-bg text-white shadow-lg">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-6">
+                <div class="flex items-center">
+                    <h1 class="text-3xl font-bold">🌍 Belezas do Mundo</h1>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <a href="#galeria" class="hover:text-blue-200 transition-colors">Galeria</a>
+                    <a href="#sobre" class="hover:text-blue-200 transition-colors">Sobre</a>
+                    <div class="relative">
+                        <input 
+                            type="text" 
+                            id="searchInput" 
+                            placeholder="Pesquisar destinos..." 
+                            class="px-4 py-2 rounded-full text-gray-800 w-64 focus:outline-none focus:ring-2 focus:ring-white"
+                        >
+                        <div id="searchSuggestions" class="absolute top-full left-0 right-0 bg-white rounded-lg shadow-lg mt-2 hidden z-10 max-h-60 overflow-y-auto">
+                        </div>
+                    </div>
+                    <div class="relative">
+                        <button id="cartBtn" class="bg-white text-purple-600 px-4 py-2 rounded-full font-semibold hover:bg-gray-100 transition-colors flex items-center">
+                            🛒 Carrinho <span id="cartCount" class="hidden ml-2">0</span>
+                        </button>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <button id="loginBtn" class="bg-transparent border-2 border-white text-white px-4 py-2 rounded-full font-semibold hover:bg-white hover:text-purple-600 transition-colors">
+                            Entrar
+                        </button>
+                        <button id="cadastroBtn" class="bg-white text-purple-600 px-4 py-2 rounded-full font-semibold hover:bg-gray-100 transition-colors">
+                            Cadastrar
+                        </button>
+                        <div id="userMenu" class="hidden flex items-center space-x-3">
+                            <span id="userName" class="text-white font-semibold"></span>
+                            <button id="logoutBtn" class="bg-red-500 text-white px-4 py-2 rounded-full font-semibold hover:bg-red-600 transition-colors">
+                                Sair
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="gradient-bg text-white py-20">
+            <div class="max-w-4xl mx-auto text-center px-4">
+                <h2 class="text-5xl font-bold mb-6">As 7 Maravilhas do Mundo Moderno</h2>
+                <p class="text-xl mb-8 opacity-90">Explore as histórias fascinantes dos monumentos mais extraordinários da humanidade e adquira suas paisagens exclusivas</p>
+                <button onclick="document.getElementById('galeria').scrollIntoView({behavior: 'smooth'})" class="bg-white text-purple-600 px-8 py-3 rounded-full font-semibold text-lg hover:bg-gray-100 transition-colors">
+                    Explorar Agora
+                </button>
+            </div>
+        </section>
+
+        <!-- Galeria de Paisagens -->
+        <section id="galeria" class="py-16 max-w-7xl mx-auto px-4">
+            <h3 class="text-4xl font-bold text-center mb-12 text-gray-800">As 7 Maravilhas do Mundo Moderno</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="paisagensGrid">
+                <!-- As paisagens serão inseridas aqui pelo JavaScript -->
+            </div>
+            
+
+        </section>
+
+        <!-- Modal de Detalhes -->
+        <div id="modalDetalhes" class="fixed inset-0 bg-black bg-opacity-50 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+            <div class="bg-white rounded-2xl max-w-4xl w-full max-h-full overflow-y-auto">
+                <div class="p-8">
+                    <div class="flex justify-between items-start mb-6">
+                        <h4 id="modalTitulo" class="text-3xl font-bold text-gray-800"></h4>
+                        <button id="fecharModal" class="text-gray-500 hover:text-gray-700 text-2xl">✕</button>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <div id="modalImagem" class="w-full h-64 bg-gradient-to-br from-blue-400 to-green-400 rounded-xl mb-4 flex items-center justify-center text-6xl"></div>
+                            <div class="flex justify-between items-center mb-4">
+                                <span id="modalPreco" class="text-2xl font-bold text-green-600"></span>
+                                <span id="modalLocalizacao" class="text-gray-600"></span>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h5 class="text-xl font-semibold mb-4 text-gray-800">História e Curiosidades</h5>
+                            <p id="modalHistoria" class="text-gray-700 leading-relaxed mb-6"></p>
+                            
+                            <div class="space-y-4">
+                                <div>
+                                    <label for="tamanhoSelect" class="block text-sm font-medium text-gray-700 mb-2">Tamanho da Impressão:</label>
+                                    <select id="tamanhoSelect" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                                        <option value="pequeno">Pequeno (30x20cm) - Preço base</option>
+                                        <option value="medio">Médio (50x35cm) - +50%</option>
+                                        <option value="grande">Grande (70x50cm) - +100%</option>
+                                    </select>
+                                </div>
+                                
+                                <button id="adicionarCarrinho" class="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-purple-700 hover:to-blue-700 transition-all">
+                                    Adicionar ao Carrinho
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de Login -->
+        <div id="modalLogin" class="fixed inset-0 bg-black bg-opacity-50 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+            <div class="bg-white rounded-2xl max-w-md w-full">
+                <div class="p-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <h4 class="text-2xl font-bold text-gray-800">Entrar na sua conta</h4>
+                        <button id="fecharLogin" class="text-gray-500 hover:text-gray-700 text-2xl">✕</button>
+                    </div>
+                    
+                    <form id="formLogin" class="space-y-4">
+                        <div>
+                            <label for="emailLogin" class="block text-sm font-medium text-gray-700 mb-2">Email:</label>
+                            <input type="email" id="emailLogin" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="seu@email.com">
+                        </div>
+                        
+                        <div>
+                            <label for="senhaLogin" class="block text-sm font-medium text-gray-700 mb-2">Senha:</label>
+                            <input type="password" id="senhaLogin" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="Sua senha">
+                        </div>
+                        
+                        <button type="submit" class="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-purple-700 hover:to-blue-700 transition-all">
+                            Entrar
+                        </button>
+                        
+                        <div class="text-center">
+                            <p class="text-gray-600">Não tem uma conta? 
+                                <button type="button" id="irParaCadastro" class="text-purple-600 hover:text-purple-700 font-semibold">Cadastre-se aqui</button>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de Cadastro -->
+        <div id="modalCadastro" class="fixed inset-0 bg-black bg-opacity-50 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+            <div class="bg-white rounded-2xl max-w-md w-full">
+                <div class="p-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <h4 class="text-2xl font-bold text-gray-800">Criar nova conta</h4>
+                        <button id="fecharCadastro" class="text-gray-500 hover:text-gray-700 text-2xl">✕</button>
+                    </div>
+                    
+                    <form id="formCadastro" class="space-y-4">
+                        <div>
+                            <label for="nomeCadastro" class="block text-sm font-medium text-gray-700 mb-2">Nome completo:</label>
+                            <input type="text" id="nomeCadastro" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="Seu nome completo">
+                        </div>
+                        
+                        <div>
+                            <label for="emailCadastro" class="block text-sm font-medium text-gray-700 mb-2">Email:</label>
+                            <input type="email" id="emailCadastro" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="seu@email.com">
+                        </div>
+                        
+                        <div>
+                            <label for="telefoneCadastro" class="block text-sm font-medium text-gray-700 mb-2">Telefone:</label>
+                            <input type="tel" id="telefoneCadastro" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="(11) 99999-9999">
+                        </div>
+                        
+                        <div>
+                            <label for="senhaCadastro" class="block text-sm font-medium text-gray-700 mb-2">Senha:</label>
+                            <input type="password" id="senhaCadastro" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="Mínimo 6 caracteres">
+                        </div>
+                        
+                        <div>
+                            <label for="confirmarSenha" class="block text-sm font-medium text-gray-700 mb-2">Confirmar senha:</label>
+                            <input type="password" id="confirmarSenha" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="Confirme sua senha">
+                        </div>
+                        
+                        <div class="flex items-center">
+                            <input type="checkbox" id="aceitarTermos" required class="mr-2">
+                            <label for="aceitarTermos" class="text-sm text-gray-700">Aceito os termos de uso e política de privacidade</label>
+                        </div>
+                        
+                        <button type="submit" class="w-full bg-gradient-to-r from-green-600 to-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-green-700 hover:to-blue-700 transition-all">
+                            Criar Conta
+                        </button>
+                        
+                        <div class="text-center">
+                            <p class="text-gray-600">Já tem uma conta? 
+                                <button type="button" id="irParaLogin" class="text-purple-600 hover:text-purple-700 font-semibold">Entre aqui</button>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal do Carrinho -->
+        <div id="modalCarrinho" class="fixed inset-0 bg-black bg-opacity-50 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+            <div class="bg-white rounded-2xl max-w-2xl w-full max-h-full overflow-y-auto">
+                <div class="p-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <h4 class="text-2xl font-bold text-gray-800">Seu Carrinho</h4>
+                        <button id="fecharCarrinho" class="text-gray-500 hover:text-gray-700 text-2xl">✕</button>
+                    </div>
+                    
+                    <div id="itensCarrinho" class="space-y-4 mb-6">
+                        <!-- Itens do carrinho serão inseridos aqui -->
+                    </div>
+                    
+                    <div class="border-t pt-4">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-xl font-semibold">Total:</span>
+                            <span id="totalCarrinho" class="text-2xl font-bold text-green-600">R$ 0,00</span>
+                        </div>
+                        
+                        <button id="finalizarCompra" class="w-full bg-gradient-to-r from-green-600 to-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-green-700 hover:to-blue-700 transition-all">
+                            Finalizar Compra
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-12 mt-16">
+        <div class="max-w-4xl mx-auto text-center px-4">
+            <h3 class="text-2xl font-bold mb-4">🌍 Belezas do Mundo</h3>
+            <p class="text-gray-300 mb-6">Conectando você com as paisagens mais extraordinárias do planeta</p>
+            <div class="flex justify-center space-x-6">
+                <span class="text-gray-400">📧 turismospelomundocontato@gmail.com</span>
+                <span class="text-gray-400">📱 +55 (86) 9993-3769</span>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+[
+  {
+    "nome": "Grande Muralha da China",
+    "preco": 329.9,
+    "imagem": "https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=800&h=600&fit=crop&crop=center",
+    "localizacao": "Beijing, China",
+    "historia": "A Grande Muralha da China é uma das maiores obras de engenharia da humanidade, construída ao longo de mais de 2.000 anos por diferentes dinastias."
+  },
+  {
+    "nome": "Torre Eiffel - França",
+    "preco": 259.9,
+    "imagem": "https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?w=800&h=600&fit=crop&crop=center",
+    "localizacao": "Paris, França",
+    "historia": "A Torre Eiffel foi construída entre 1887 e 1889 por Gustave Eiffel e tornou-se símbolo de Paris."
+  },
+  {
+    "nome": "Cristo Redentor - Brasil",
+    "preco": 189.9,
+    "imagem": "https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=800&h=600&fit=crop&crop=center",
+    "localizacao": "Rio de Janeiro, Brasil",
+    "historia": "O Cristo Redentor, inaugurado em 1931, é um ícone do Brasil e uma obra art déco impressionante."
+  },
+  {
+    "nome": "Machu Picchu - Peru",
+    "preco": 349.9,
+    "imagem": "https://images.unsplash.com/photo-1587595431973-160d0d94add1?w=800&h=600&fit=crop&crop=center",
+    "localizacao": "Cusco, Peru",
+    "historia": "Machu Picchu é a 'Cidade Perdida dos Incas', construída no século XV pelo imperador Pachacuti."
+  },
+  {
+    "nome": "Pirâmides de Gizé - Egito",
+    "preco": 379.9,
+    "imagem": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/All_Gizah_Pyramids.jpg/1200px-All_Gizah_Pyramids.jpg",
+    "localizacao": "Gizé, Egito",
+    "historia": "As Pirâmides de Gizé são remanescentes das Sete Maravilhas do Mundo Antigo e foram construídas como tumbas reais."
+  },
+  {
+    "nome": "Taj Mahal - Índia",
+    "preco": 299.9,
+    "imagem": "https://images.unsplash.com/photo-1505765051391-2d7b7f5f0b1d?w=800&h=600&fit=crop&crop=center",
+    "localizacao": "Agra, Índia",
+    "historia": "O Taj Mahal foi construído no século XVII pelo imperador Shah Jahan em memória de sua esposa Mumtaz Mahal."
+  },
+  {
+    "nome": "Petra - Jordânia",
+    "preco": 219.9,
+    "imagem": "https://images.unsplash.com/photo-1505765051392-3f1f9d2c9f4b?w=800&h=600&fit=crop&crop=center",
+    "localizacao": "Wadi Musa, Jordânia",
+    "historia": "Petra é uma antiga cidade esculpida em rocha, famosa por seus edifícios talhados nas paredes de arenito."
+  }
+]
